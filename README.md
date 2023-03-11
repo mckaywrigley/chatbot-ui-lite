@@ -2,11 +2,15 @@
 
 A simple chatbot starter kit for OpenAI's chat model using Next.js, TypeScript, and Tailwind CSS.
 
+See a [demo]().
+
 ![Chatbot UI](./public/screenshot.png)
 
 ## Features
 
 Chatbot UI provides a simple, fully-functional chat interface that you can use to start building your own chatbot apps powered by OpenAI.
+
+It has everything you need to hit the ground running.
 
 Modify the chat interface in `components/Chat`.
 
@@ -54,4 +58,6 @@ Search for `DELETE BRANDING` to quickly find and remove the branding in `Navbar.
 
 ## Contact
 
-If you have any questions, feel free to reach out to me on [Twitter](https://twitter.com/mckaywrigley)!
+If you have any questions, feel free to reach out to me on [Twitter](https://twitter.com/mckaywrigley).
+
+I'd also love to see what you build with this starter kit - share your projects with me!
