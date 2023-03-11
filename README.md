@@ -40,13 +40,13 @@ Create a .env.local file in the root of the repo with your OpenAI API Key:
 OPENAI_API_KEY=<YOUR_KEY>
 ```
 
-**4. Run app**
+**4. Run App**
 
 ```bash
 npm run dev
 ```
 
-**5. Start building**
+**5. Start Building**
 
 You should be able to start chatting with the bot.
 
