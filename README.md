@@ -1,8 +1,8 @@
 # Chatbot UI
 
-![Chatbot UI](./public/screenshot.png)
-
 A simple chatbot starter kit for OpenAI's chat model using Next.js, TypeScript, and Tailwind CSS.
+
+![Chatbot UI](./public/screenshot.png)
 
 ## Features
 
