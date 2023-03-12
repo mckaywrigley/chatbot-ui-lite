@@ -18,6 +18,12 @@ Tweak the system prompt in `utils/index.ts`.
 
 Tweak the assistant prompt in `pages/index.tsx`.
 
+## Deploy With Vercel
+
+Host your own live version of Chatbot UI.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmckaywrigley%2Fchatbot-ui&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key%20needed%20for%20chat.&envLink=https%3A%2F%2Fopenai.com%2Fproduct&project-name=chatbot-ui&repository-name=chatbot-ui)
+
 ## Running Locally
 
 **1. Clone Repo**
