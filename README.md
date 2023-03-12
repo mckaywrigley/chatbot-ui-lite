@@ -28,7 +28,7 @@ Host your own live version of Chatbot UI with Vercel.
 
 **Replit**
 
-Fork Chatbot UI on Replit (here)[https://replit.com/@MckayWrigley/chatbot-ui].
+Fork Chatbot UI on Replit [here](https://replit.com/@MckayWrigley/chatbot-ui).
 
 ## Running Locally
 
