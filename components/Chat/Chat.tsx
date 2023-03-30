@@ -3,14 +3,16 @@ import { FC } from "react";
 import { ChatInput } from "./ChatInput";
 import { ChatLoader } from "./ChatLoader";
 import { ChatMessage } from "./ChatMessage";
+import { ResetButton } from "./ResetButton";
 
 interface Props {
   messages: Message[];
   loading: boolean;
   onSend: (message: Message) => void;
+  onReset: () => void;
 }
 
-export const Chat: FC<Props> = ({ messages, loading, onSend }) => {
+export const Chat: FC<Props> = ({ messages, loading, onSend, onReset }) => {
   return (
     <div className="flex flex-col rounded-lg px-2 sm:p-4 sm:border border-neutral-300">
       {messages.map((message, index) => (
@@ -30,6 +32,10 @@ export const Chat: FC<Props> = ({ messages, loading, onSend }) => {
 
       <div className="mt-4 sm:mt-8 bottom-[56px] left-0 w-full">
         <ChatInput onSend={onSend} />
+      </div>
+
+      <div className="mt-4">
+        <ResetButton onReset={onReset} />
       </div>
     </div>
   );

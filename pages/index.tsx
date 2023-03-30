@@ -76,17 +76,21 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  useEffect(() => {
+  const handleReset = () => {
     setMessages([
       {
         role: "assistant",
         content: `Hi there! I'm Chatbot UI, an AI assistant. I can help you with things like answering questions, providing information, and helping with tasks. How can I help you?`
       }
     ]);
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    handleReset();
   }, []);
 
   return (
@@ -116,6 +120,7 @@ export default function Home() {
               messages={messages}
               loading={loading}
               onSend={handleSend}
+              onReset={handleReset}
             />
             <div ref={messagesEndRef} />
           </div>
