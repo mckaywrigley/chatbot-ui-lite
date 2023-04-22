@@ -1,5 +1,5 @@
 # A fork of Chatbot UI Lite using Langchain to further simplify it
-
+I will also try to add some extra features to it.
 # Chatbot UI Lite
 
 A simple chatbot starter kit for OpenAI's chat model using Next.js, TypeScript, and Tailwind CSS.
