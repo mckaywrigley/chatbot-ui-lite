@@ -1,3 +1,5 @@
+# A fork of Chatbot UI Lite using Langchain to further simplify it
+
 # Chatbot UI Lite
 
 A simple chatbot starter kit for OpenAI's chat model using Next.js, TypeScript, and Tailwind CSS.
@@ -16,7 +18,6 @@ It has everything you need to hit the ground running.
 
 Modify the chat interface in `components/Chat`.
 
-Tweak the system prompt in `utils/index.ts`.
 
 Tweak the assistant prompt in `pages/index.tsx`.
 
@@ -48,11 +49,7 @@ npm i
 
 **3. Provide OpenAI API Key**
 
-Create a .env.local file in the root of the repo with your OpenAI API Key:
-
-```bash
-OPENAI_API_KEY=<YOUR_KEY>
-```
+Change Key in pages/index.tsx
 
 **4. Run App**
 
