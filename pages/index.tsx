@@ -4,12 +4,33 @@ import { Navbar } from "@/components/Layout/Navbar";
 import { Message } from "@/types";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
+import { OpenAI } from "langchain/llms/openai";
+import { ChatOpenAI } from "langchain/chat_models/openai";
+import { HumanChatMessage, SystemChatMessage } from "langchain/schema";
+import { LLMChain } from "langchain/chains";
+import {
+  SystemMessagePromptTemplate,
+  HumanMessagePromptTemplate,
+  ChatPromptTemplate,
+} from "langchain/prompts";
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  console.log(process.env.key);
+  const chat = new ChatOpenAI({ openAIApiKey: "ENTER KEY HERE", temperature: 0.7 })
+  const assistantPrompt = ChatPromptTemplate.fromPromptMessages([
+    SystemMessagePromptTemplate.fromTemplate(
+      "You are a helpful AI assistant. This is the history of your conversation so far: {history}"
+    ),
+    HumanMessagePromptTemplate.fromTemplate("{text}"),
+  ]);
+  const chain = new LLMChain({
+    prompt:assistantPrompt,
+    llm: chat,
+  });
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -21,38 +42,15 @@ export default function Home() {
     setMessages(updatedMessages);
     setLoading(true);
 
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        messages: updatedMessages
-      })
-    });
-
-    if (!response.ok) {
-      setLoading(false);
-      throw new Error(response.statusText);
+    let messageHistory = "";
+    for (let i = 0; i < updatedMessages.length; i++) {
+      messageHistory = messageHistory.concat(`${updatedMessages[i].role}: ${updatedMessages[i].content}, `)
     }
 
-    const data = response.body;
+    const response = await chain.call({history: messageHistory, text: message.content});
 
-    if (!data) {
-      return;
-    }
-
-    setLoading(false);
-
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
     let isFirst = true;
-
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
+    setLoading(true);
 
       if (isFirst) {
         isFirst = false;
@@ -60,21 +58,22 @@ export default function Home() {
           ...messages,
           {
             role: "assistant",
-            content: chunkValue
+            content: response.text
           }
         ]);
+        setLoading(false);
       } else {
         setMessages((messages) => {
           const lastMessage = messages[messages.length - 1];
           const updatedMessage = {
             ...lastMessage,
-            content: lastMessage.content + chunkValue
+            content: lastMessage.content + response
           };
+          setLoading(false);
           return [...messages.slice(0, -1), updatedMessage];
         });
       }
     }
-  };
 
   const handleReset = () => {
     setMessages([
@@ -134,4 +133,4 @@ export default function Home() {
       </div>
     </>
   );
-}
+  }
