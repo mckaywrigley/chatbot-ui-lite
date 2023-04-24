@@ -13,18 +13,14 @@ import {
   HumanMessagePromptTemplate,
   ChatPromptTemplate,
 } from "langchain/prompts";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { CharacterTextSplitter } from "langchain/text_splitter";
-
-const key = "ENTER KEY HERE";
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chat = new ChatOpenAI({ openAIApiKey: key, temperature: 0.7 })
+  console.log(process.env.key);
+  const chat = new ChatOpenAI({ openAIApiKey: "ENTER KEY HERE", temperature: 0.7 })
   const assistantPrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
       "You are a helpful AI assistant. This is the history of your conversation so far: {history}"
@@ -48,12 +44,9 @@ export default function Home() {
 
     let messageHistory = "";
     for (let i = 0; i < updatedMessages.length; i++) {
-      messageHistory = messageHistory.concat(`${updatedMessages[i].role}: ${updatedMessages[i].content}; `)
+      messageHistory = messageHistory.concat(`${updatedMessages[i].role}: ${updatedMessages[i].content}, `)
     }
-    if (localStorage.getItem("history") !== null){
-      const contextInjection = await handleLoad(message.content);
-      messageHistory = messageHistory.concat(String(contextInjection));
-    }
+
     const response = await chain.call({history: messageHistory, text: message.content});
 
     let isFirst = true;
@@ -89,56 +82,6 @@ export default function Home() {
         content: `Hi there! I'm Chatbot UI, an AI assistant. I can help you with things like answering questions, providing information, and helping with tasks. How can I help you?`
       }
     ]);
-  };
-
-  const handleSave = () => {
-    if (localStorage.getItem("history") === null){
-      let messageHistory:string;
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      const day = String(today.getDate()).padStart(2, '0');
-      const dateString = `~// ON YEAR-${year} MONTH-${month} DAY-${day}:`;
-      messageHistory = `${dateString}: `; 
-      for (let i = 0; i < messages.length; i++) {
-        messageHistory = messageHistory.concat(`${messages[i].role}: ${messages[i].content}; `)
-      }
-      localStorage.setItem("history", messageHistory);
-      //console.log(localStorage.getItem("history"))
-    }
-    else {
-      let messageHistory:string;
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      const day = String(today.getDate()).padStart(2, '0');
-      const dateString = `~// ON YEAR-${year} MONTH-${month} DAY-${day}:`;
-      messageHistory = String(localStorage.getItem("history"));
-      messageHistory = messageHistory.concat(`${dateString}: `); 
-      for (let i = 0; i < messages.length; i++) {
-        messageHistory = messageHistory.concat(`${messages[i].role}: ${messages[i].content}; `)
-      }
-      localStorage.setItem("history", messageHistory);
-    }
-    
-  };
-
-  const handleLoad = async (message:string) => {
-    if (localStorage.getItem("history") !== null){
-      const messageHistory:string = String(localStorage.getItem("history"));
-      const splitter = new CharacterTextSplitter({separator: "~// ON "});
-      const output = await splitter.createDocuments([messageHistory]);
-      const vectorStore = await MemoryVectorStore.fromDocuments(
-        output,
-        new OpenAIEmbeddings({openAIApiKey: key})
-      );
-      const results = await vectorStore.similaritySearch(message, 5);
-      let resultConcat = "";
-      for (let i = 0; i < results.length; i++) {
-        resultConcat = resultConcat.concat(`${results[i].pageContent};`)
-      }
-      return resultConcat
-    }
   };
 
   useEffect(() => {
@@ -182,7 +125,6 @@ export default function Home() {
               loading={loading}
               onSend={handleSend}
               onReset={handleReset}
-              onSave={handleSave}
             />
             <div ref={messagesEndRef} />
           </div>
