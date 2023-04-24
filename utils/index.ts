@@ -53,10 +53,16 @@ export const OpenAIStream = async (messages: Message[]) => {
       };
 
       const parser = createParser(onParse);
-
-      for await (const chunk of res.body as any) {
-        parser.feed(decoder.decode(chunk));
+      const reader = response.body!.getReader();
+      while (true) {
+        const { done, value } = await reader.read();
+          if (done) {
+            break;
+          }
+          const chunk = decoder.decode(value);
+          parser.feed(chunk);
       }
+      controller.close();
     }
   });
 
